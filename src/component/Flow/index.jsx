@@ -14,7 +14,7 @@ import 'reactflow/dist/style.css'
 import { useLocalStorage } from '../../hooks'
 
 import { Node } from '../Node'
-import { AddButton } from './flow.styled'
+import { AddButton, Header } from './flow.styled'
 import short from 'short-uuid'
 import { Edge } from '../Edge'
 import { initialEdges, initialNodes } from '../../initialdata'
@@ -139,27 +139,35 @@ const Flow = () => {
 		reactFlowInstance.addNodes(newNode)
 	}
 	return (
-		<div className='unselectable' ref={reactFlowWrapper}>
-			<AddButton onClick={onClick}>+</AddButton>
-			<ReactFlow
-				nodes={nodes}
-				edges={edges}
-				onNodesChange={onNodesChange}
-				onEdgesChange={onEdgesChange}
-				defaultEdgeOptions={edgeOptions}
-				onConnect={onConnect}
-				nodeTypes={nodeTypes}
-				connectionLineStyle={connectionLineStyle}
-				onConnectEnd={onConnectEnd}
-				onConnectStart={onConnectStart}
-				fitView
-				minZoom={0.1}
-				onlyRenderVisibleElements={true}
-				edgeTypes={edgeTypes}>
-				<Background color='#9a9a9a' />
-				<Controls />
-				<MiniMap pannable zoomable />
-			</ReactFlow>
+		<div>
+			<Header>
+				<span class='material-symbols-outlined'>arrow_back_ios</span>
+				<h2>Title </h2>
+			</Header>
+			<div className='unselectable' ref={reactFlowWrapper}>
+				<AddButton onClick={onClick}>
+					<span class='material-symbols-outlined'>add</span>
+				</AddButton>
+				<ReactFlow
+					nodes={nodes}
+					edges={edges}
+					onNodesChange={onNodesChange}
+					onEdgesChange={onEdgesChange}
+					defaultEdgeOptions={edgeOptions}
+					onConnect={onConnect}
+					nodeTypes={nodeTypes}
+					connectionLineStyle={connectionLineStyle}
+					onConnectEnd={onConnectEnd}
+					onConnectStart={onConnectStart}
+					fitView
+					minZoom={0.1}
+					onlyRenderVisibleElements={true}
+					edgeTypes={edgeTypes}>
+					<Background color='#9a9a9a' />
+					<Controls />
+					{/* <MiniMap pannable zoomable /> */}
+				</ReactFlow>
+			</div>
 		</div>
 	)
 }
