@@ -1,31 +1,29 @@
-import { useCallback } from 'react';
-import { Handle, Position } from 'reactflow';
-import { EditableDiv } from '../Edge/edge.styled';
+import { useCallback } from 'react'
+import { Handle, Position } from 'reactflow'
+import { EditableDiv } from '../Edge/edge.styled'
 import {
 	InputContainer,
 	NodeStyled,
 	MainInputContainer,
 	Input,
-} from './node.styled';
+	StyledHandle,
+} from './node.styled'
 
 export const Node = ({ data }) => {
-	const { name = '', description = '' } = data ?? {};
+	const { name = '', description = '' } = data ?? {}
 
 	const onInput = useCallback((evt, name) => {
-		evt.preventDefault();
-		evt.stopPropagation();
-		const { innerText } = evt.target ?? {};
+		evt.preventDefault()
+		evt.stopPropagation()
+		const { innerText } = evt.target ?? {}
 		if (innerText.trim()) {
-			data[name] = innerText;
+			data[name] = innerText
 		}
-	}, []);
+	}, [])
 
 	return (
 		<NodeStyled>
-			<Handle
-				type='target'
-				position={Position.Top}
-			/>
+			<StyledHandle type='target' position={Position.Top} />
 			<EditableDiv
 				contentEditable={true}
 				placeholder='Name'
@@ -33,8 +31,7 @@ export const Node = ({ data }) => {
 				onInput={(e) => onInput(e, 'name')}
 				style={{
 					fontWeight: 'bold',
-				}}
-			>
+				}}>
 				{name ?? ''}
 			</EditableDiv>
 
@@ -45,15 +42,11 @@ export const Node = ({ data }) => {
 				placeholder='Type description here..'
 				className='nodrag nopan'
 				style={{ fontSize: '0.9em' }}
-				onInput={(e) => onInput(e, 'description')}
-			>
+				onInput={(e) => onInput(e, 'description')}>
 				{description ?? ''}
 			</EditableDiv>
 
-			<Handle
-				type='source'
-				position={Position.Bottom}
-			/>
+			<StyledHandle type='source' position={Position.Bottom} />
 		</NodeStyled>
-	);
-};
+	)
+}

@@ -1,14 +1,14 @@
-import React, { useCallback, useRef, useState } from 'react';
-import { getBezierPath, EdgeLabelRenderer } from 'reactflow';
+import React, { useCallback, useRef, useState } from 'react'
+import { getBezierPath, EdgeLabelRenderer } from 'reactflow'
 
 import {
 	AddTextButton,
 	EdgeInput,
 	EditableDiv,
 	ForeignContainer,
-} from './edge.styled';
+} from './edge.styled'
 
-const foreignObjectSize = 40;
+const foreignObjectSize = 40
 export const Edge = ({
 	id,
 	sourceX,
@@ -20,6 +20,7 @@ export const Edge = ({
 	style = {},
 	data,
 	markerEnd,
+	selected,
 }) => {
 	const [edgePath, labelX, labelY] = getBezierPath({
 		sourceX,
@@ -28,21 +29,25 @@ export const Edge = ({
 		targetX,
 		targetY,
 		targetPosition,
-	});
-	const editableDivRef = useRef(null);
+	})
+	const editableDivRef = useRef(null)
 
 	const onChange = useCallback((evt) => {
-		const { innerText } = evt.target ?? {};
+		const { innerText } = evt.target ?? {}
 		if (innerText.trim()) {
-			data.text = innerText;
+			data.text = innerText
 		}
-	}, []);
+	}, [])
+
+	const selectedStyle = {
+		background: 'purple',
+	}
 
 	return (
 		<>
 			<path
 				id={id}
-				style={{ ...style, strokeWidth: 2 }}
+				style={{ ...style, strokeWidth: selected ? 4 : 2 }}
 				className='react-flow__edge-path'
 				d={edgePath}
 				markerEnd={markerEnd}
@@ -63,18 +68,16 @@ export const Edge = ({
 						display: 'flex',
 						justifyContent: 'center',
 					}}
-					className='nodrag nopan'
-				>
+					className='nodrag nopan'>
 					<EditableDiv
 						ref={editableDivRef}
 						onInput={onChange}
 						contentEditable={true}
-						placeholder='Add Text'
-					>
+						placeholder='Add Text'>
 						{data?.text ?? ''}
 					</EditableDiv>
 				</div>
 			</EdgeLabelRenderer>
 		</>
-	);
-};
+	)
+}

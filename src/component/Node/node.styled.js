@@ -1,20 +1,23 @@
-import styled from 'styled-components';
+import { Handle } from 'reactflow'
+import styled from 'styled-components'
 
 export const NodeStyled = styled.div`
 	background: white;
 	overflow: hidden;
-	padding: 20px;
+	padding: 30px;
 	width: auto;
 	height: auto;
-	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+	border: 1px solid #00000052;
+	outline: none;
 	transition: 0.3s;
 	pointer-events: all;
 	border-radius: 5px; /* 5px rounded corners */
 
-	& {
-		box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+	&:hover,
+	&:active {
+		box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 	}
-`;
+`
 
 export const Input = styled.input`
 	color: #404040;
@@ -34,12 +37,12 @@ export const Input = styled.input`
 	&:focus {
 		border-bottom: 1px solid green;
 	}
-`;
+`
 
 export const Label = styled.label`
 	color: red;
 	display: block;
-`;
+`
 
 export const InputContainer = styled.div`
 	label {
@@ -65,10 +68,23 @@ export const InputContainer = styled.div`
 			border-bottom: 1px solid green;
 		}
 	}
-`;
+`
 
 export const MainInputContainer = styled.div`
 	display: flex;
 	flex-direction: column;
 	gap: 20px;
-`;
+`
+
+export const StyledHandle = styled(Handle)`
+	width: 15px;
+	height: 15px;
+	transition: all 0.3s;
+	background: grey;
+	&:active,
+	&:hover {
+		background: green;
+		width: 20px;
+		height: 20px;
+	}
+`
