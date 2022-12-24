@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react'
 import ReactFlow, {
 	addEdge,
 	applyEdgeChanges,
@@ -9,18 +9,18 @@ import ReactFlow, {
 	MiniMap,
 	ReactFlowProvider,
 	useReactFlow,
-} from 'reactflow';
-import 'reactflow/dist/style.css';
-import { useLocalStorage } from '../../hooks';
+} from 'reactflow'
+import 'reactflow/dist/style.css'
+import { useLocalStorage } from '../../hooks'
 
-import { Node } from '../Node';
-import { AddButton } from './flow.styled';
-import short from 'short-uuid';
-import { Edge } from '../Edge';
-import { initialEdges, initialNodes } from '../../initialdata';
+import { Node } from '../Node'
+import { AddButton } from './flow.styled'
+import short from 'short-uuid'
+import { Edge } from '../Edge'
+import { initialEdges, initialNodes } from '../../initialdata'
 
-const nodeTypes = { textUpdater: Node };
-const edgeTypes = { custom: Edge };
+const nodeTypes = { textUpdater: Node }
+const edgeTypes = { custom: Edge }
 
 const edgeOptions = {
 	animated: true,
@@ -31,57 +31,57 @@ const edgeOptions = {
 	markerEnd: {
 		type: MarkerType.ArrowClosed,
 	},
-};
+}
 
-const connectionLineStyle = { stroke: 'red' };
+const connectionLineStyle = { stroke: 'red' }
 
 const Flow = () => {
-	const reactFlowWrapper = useRef(null);
-	const connectingNodeId = useRef(null);
+	const reactFlowWrapper = useRef(null)
+	const connectingNodeId = useRef(null)
 
-	const reactFlowInstance = useReactFlow();
-	const { project } = reactFlowInstance;
+	const reactFlowInstance = useReactFlow()
+	const { project } = reactFlowInstance
 
-	const [_nodes, _setNodes] = useLocalStorage('nodes', []);
-	const [_edges, _setEdges] = useLocalStorage('edges', []);
+	const [_nodes, _setNodes] = useLocalStorage('nodes', [])
+	const [_edges, _setEdges] = useLocalStorage('edges', [])
 
-	const [nodes, setNodes] = useState(_nodes);
-	const [edges, setEdges] = useState(_edges);
+	const [nodes, setNodes] = useState(_nodes)
+	const [edges, setEdges] = useState(_edges)
 
 	useEffect(() => {
-		_setNodes(nodes);
-		_setEdges(edges);
-	});
+		_setNodes(nodes)
+		_setEdges(edges)
+	})
 
 	const onNodesChange = useCallback(
 		(changes) => setNodes((nds) => applyNodeChanges(changes, nds)),
 		[setNodes]
-	);
+	)
 	const onEdgesChange = useCallback(
 		(changes) => setEdges((eds) => applyEdgeChanges(changes, eds)),
 		[setEdges]
-	);
+	)
 	const onConnect = useCallback(
 		(connection) => {
-			connection.type = 'custom';
-			connection.data = {};
-			console.log({ connection });
-			setEdges((eds) => addEdge(connection, eds));
+			connection.type = 'custom'
+			connection.data = {}
+			console.log({ connection })
+			setEdges((eds) => addEdge(connection, eds))
 		},
 		[setEdges]
-	);
+	)
 
 	const onConnectStart = useCallback((_, { nodeId }) => {
-		connectingNodeId.current = nodeId;
-	}, []);
+		connectingNodeId.current = nodeId
+	}, [])
 	const onConnectEnd = useCallback(
 		(event) => {
-			const targetIsPane = event.target.classList.contains('react-flow__pane');
+			const targetIsPane = event.target.classList.contains('react-flow__pane')
 
 			if (targetIsPane) {
-				const { top, left } = reactFlowWrapper.current.getBoundingClientRect();
-				const id = short.generate();
-				const edgeID = short.generate();
+				const { top, left } = reactFlowWrapper.current.getBoundingClientRect()
+				const id = short.generate()
+				const edgeID = short.generate()
 				const newNode = {
 					id,
 					position: project({
@@ -90,11 +90,11 @@ const Flow = () => {
 					}),
 					type: 'textUpdater',
 					data: {},
-				};
+				}
 
 				setNodes((nds) => {
-					return nds.concat(newNode);
-				});
+					return nds.concat(newNode)
+				})
 				setEdges((eds) =>
 					eds.concat({
 						id: edgeID,
@@ -104,11 +104,11 @@ const Flow = () => {
 						type: 'custom',
 						data: {},
 					})
-				);
+				)
 			}
 		},
 		[project]
-	);
+	)
 
 	const onClick = useCallback(() => {
 		const newNode = {
@@ -119,14 +119,11 @@ const Flow = () => {
 			},
 			type: 'textUpdater',
 			data: {},
-		};
-		reactFlowInstance.addNodes(newNode);
-	}, []);
+		}
+		reactFlowInstance.addNodes(newNode)
+	}, [])
 	return (
-		<div
-			className='unselectable'
-			ref={reactFlowWrapper}
-		>
+		<div className='unselectable' ref={reactFlowWrapper}>
 			<AddButton onClick={onClick}>+</AddButton>
 			<ReactFlow
 				nodes={nodes}
@@ -142,23 +139,19 @@ const Flow = () => {
 				fitView
 				minZoom={0.1}
 				onlyRenderVisibleElements={true}
-				edgeTypes={edgeTypes}
-			>
+				edgeTypes={edgeTypes}>
 				<Background color='#9a9a9a' />
 				<Controls />
-				<MiniMap
-					pannable
-					zoomable
-				/>
+				<MiniMap pannable zoomable />
 			</ReactFlow>
 		</div>
-	);
-};
+	)
+}
 
 export default function () {
 	return (
 		<ReactFlowProvider>
 			<Flow />
 		</ReactFlowProvider>
-	);
+	)
 }

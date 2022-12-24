@@ -2,4 +2,4 @@ Bugs
 1. touch interation not working
 2. give delete icon on selected egde and card
 3. Highlight selected card
-
+4. Bring new card always to the center of the screen
