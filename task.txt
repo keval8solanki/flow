@@ -1,5 +1,10 @@
+Goals
 1. Login / Signup page
 2. Dashboard
     2.1 flow list
     2.2 create flow button
 3. Improvements
+
+Current Task
+1. Make Dashboard page
+2. use local storage to store all the data for now
