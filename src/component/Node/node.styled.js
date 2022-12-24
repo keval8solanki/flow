@@ -1,4 +1,5 @@
-import styled from 'styled-components';
+import { Handle } from 'reactflow'
+import styled from 'styled-components'
 
 export const NodeStyled = styled.div`
 	background: white;
@@ -14,7 +15,7 @@ export const NodeStyled = styled.div`
 	& {
 		box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
 	}
-`;
+`
 
 export const Input = styled.input`
 	color: #404040;
@@ -34,12 +35,12 @@ export const Input = styled.input`
 	&:focus {
 		border-bottom: 1px solid green;
 	}
-`;
+`
 
 export const Label = styled.label`
 	color: red;
 	display: block;
-`;
+`
 
 export const InputContainer = styled.div`
 	label {
@@ -65,10 +66,22 @@ export const InputContainer = styled.div`
 			border-bottom: 1px solid green;
 		}
 	}
-`;
+`
 
 export const MainInputContainer = styled.div`
 	display: flex;
 	flex-direction: column;
 	gap: 20px;
-`;
+`
+
+export const StyledHandle = styled(Handle)`
+	width: 10px;
+	height: 10px;
+	transition: all 0.3s;
+	&:active,
+	&:hover {
+		background: green;
+		width: 15px;
+		height: 15px;
+	}
+`
