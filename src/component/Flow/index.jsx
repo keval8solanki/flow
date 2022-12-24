@@ -18,6 +18,7 @@ import { AddButton } from './flow.styled'
 import short from 'short-uuid'
 import { Edge } from '../Edge'
 import { initialEdges, initialNodes } from '../../initialdata'
+import { getSelectedNode } from './flow.util'
 
 const nodeTypes = { textUpdater: Node }
 const edgeTypes = { custom: Edge }
@@ -47,6 +48,9 @@ const Flow = () => {
 
 	const [nodes, setNodes] = useState(_nodes)
 	const [edges, setEdges] = useState(_edges)
+
+	const selectedNode = getSelectedNode(_nodes)
+	console.log({ selectedNode })
 
 	useEffect(() => {
 		_setNodes(nodes)
@@ -110,18 +114,30 @@ const Flow = () => {
 		[project]
 	)
 
-	const onClick = useCallback(() => {
+	const getCenter = () => {
+		const selectedNode = getSelectedNode(_nodes)
+		if (selectedNode) {
+			const { x, y } = selectedNode.position ?? {}
+			return [x, y + 200]
+		}
+		const x = window.innerWidth / 2
+		const y = window.innerHeight / 2
+		return [x, y]
+	}
+	const onClick = () => {
+		const [x, y] = getCenter()
+		console.log({ x, y })
 		const newNode = {
 			id: short.generate(),
 			position: {
-				x: 200,
-				y: 200,
+				x,
+				y,
 			},
 			type: 'textUpdater',
 			data: {},
 		}
 		reactFlowInstance.addNodes(newNode)
-	}, [])
+	}
 	return (
 		<div className='unselectable' ref={reactFlowWrapper}>
 			<AddButton onClick={onClick}>+</AddButton>
