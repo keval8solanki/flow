@@ -22,7 +22,6 @@ export const Edge = ({
 	markerEnd,
 	selected,
 }) => {
-	console.log({ selected })
 	const [edgePath, labelX, labelY] = getBezierPath({
 		sourceX,
 		sourceY,

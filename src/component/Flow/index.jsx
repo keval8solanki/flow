@@ -1,4 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { Link, useParams } from 'react-router-dom'
+
 import ReactFlow, {
 	addEdge,
 	applyEdgeChanges,
@@ -15,10 +17,11 @@ import { useLocalStorage } from '../../hooks'
 
 import { Node } from '../Node'
 import { AddButton, Header } from './flow.styled'
-import short from 'short-uuid'
+
 import { Edge } from '../Edge'
 import { initialEdges, initialNodes } from '../../initialdata'
 import { getSelectedNode } from './flow.util'
+import { EditableDiv } from '../Edge/edge.styled'
 
 const nodeTypes = { textUpdater: Node }
 const edgeTypes = { custom: Edge }
@@ -36,26 +39,38 @@ const edgeOptions = {
 
 const connectionLineStyle = { stroke: 'red' }
 
-const Flow = () => {
+const Flow = (props) => {
+	// const match = useMatch()
+	const { flowID } = useParams()
+	//
 	const reactFlowWrapper = useRef(null)
 	const connectingNodeId = useRef(null)
 
 	const reactFlowInstance = useReactFlow()
 	const { project } = reactFlowInstance
 
-	const [_nodes, _setNodes] = useLocalStorage('nodes', [])
-	const [_edges, _setEdges] = useLocalStorage('edges', [])
+	const [data, setData] = useLocalStorage(flowID, {})
 
-	const [nodes, setNodes] = useState(_nodes)
-	const [edges, setEdges] = useState(_edges)
+	// const [_nodes, _setNodes] = useLocalStorage('flowID', [])
+	// const [_edges, _setEdges] = useLocalStorage('edges', [])
 
-	const selectedNode = getSelectedNode(_nodes)
-	console.log({ selectedNode })
+	const titleRef = useRef(null)
+	const [nodes, setNodes] = useState(data?.nodes ?? [])
+	const [edges, setEdges] = useState(data?.edges ?? [])
+	const [title, setTitle] = useState(data.title ?? '')
 
-	useEffect(() => {
-		_setNodes(nodes)
-		_setEdges(edges)
-	})
+	const save = () => {
+		setData({
+			title: titleRef.current.innerText,
+			nodes,
+			edges,
+		})
+	}
+
+	const reset = () => {
+		setNodes([])
+		setEdges([])
+	}
 
 	const onNodesChange = useCallback(
 		(changes) => setNodes((nds) => applyNodeChanges(changes, nds)),
@@ -69,7 +84,7 @@ const Flow = () => {
 		(connection) => {
 			connection.type = 'custom'
 			connection.data = {}
-			console.log({ connection })
+
 			setEdges((eds) => addEdge(connection, eds))
 		},
 		[setEdges]
@@ -84,8 +99,8 @@ const Flow = () => {
 
 			if (targetIsPane) {
 				const { top, left } = reactFlowWrapper.current.getBoundingClientRect()
-				const id = short.generate()
-				const edgeID = short.generate()
+				const id = crypto.randomUUID()
+				const edgeID = crypto.randomUUID()
 				const newNode = {
 					id,
 					position: project({
@@ -115,7 +130,7 @@ const Flow = () => {
 	)
 
 	const getCenter = () => {
-		const selectedNode = getSelectedNode(_nodes)
+		const selectedNode = getSelectedNode(nodes)
 		if (selectedNode) {
 			const { x, y } = selectedNode.position ?? {}
 			return [x, y + 200]
@@ -126,9 +141,9 @@ const Flow = () => {
 	}
 	const onClick = () => {
 		const [x, y] = getCenter()
-		console.log({ x, y })
+
 		const newNode = {
-			id: short.generate(),
+			id: crypto.randomUUID(),
 			position: {
 				x,
 				y,
@@ -141,8 +156,22 @@ const Flow = () => {
 	return (
 		<div>
 			<Header>
-				<span class='material-symbols-outlined'>arrow_back_ios</span>
-				<h2>Title </h2>
+				<Link relative='path' to='/	'>
+					<span class='material-symbols-outlined'>arrow_back_ios</span>
+				</Link>
+				<EditableDiv
+					contentEditable={true}
+					placeholder='Title'
+					ref={titleRef}
+					style={{
+						fontWeight: 'bold',
+					}}>
+					{data?.title ?? ''}
+				</EditableDiv>
+				<div>
+					<button onClick={save}>Save</button>
+					<button onClick={reset}>Clear</button>
+				</div>
 			</Header>
 			<div className='unselectable' ref={reactFlowWrapper}>
 				<AddButton onClick={onClick}>
@@ -172,10 +201,4 @@ const Flow = () => {
 	)
 }
 
-export default function () {
-	return (
-		<ReactFlowProvider>
-			<Flow />
-		</ReactFlowProvider>
-	)
-}
+export default Flow
