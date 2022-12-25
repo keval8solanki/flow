@@ -12,7 +12,8 @@
 	-moz-user-select: none;
 	-ms-user-select: none;
 	user-select: none;
-	height: calc(100vh - 53px);
+	height: calc(100vh - 116px);
+	overflow: hidden;
 }
 
 [contentEditable='true']:empty:before {
