@@ -1,3 +1,4 @@
+import { Toolbar } from '@mui/material'
 import styled from 'styled-components'
 
 export const AddButton = styled.button`
@@ -24,5 +25,11 @@ export const Header = styled.div`
 	padding: 10px 20px;
 	display: flex;
 	align-items: center;
-	gap:20px ;
+	gap: 20px;
+`
+
+export const StyledToolBar = styled(Toolbar)`
+	&& {
+		justify-content: space-between;
+	}
 `

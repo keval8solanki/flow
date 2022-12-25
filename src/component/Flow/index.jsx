@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 
 import ReactFlow, {
 	addEdge,
@@ -16,12 +16,23 @@ import 'reactflow/dist/style.css'
 import { useLocalStorage } from '../../hooks'
 
 import { Node } from '../Node'
-import { AddButton, Header } from './flow.styled'
+import { AddButton, Header, StyledToolBar } from './flow.styled'
 
 import { Edge } from '../Edge'
 import { initialEdges, initialNodes } from '../../initialdata'
 import { getSelectedNode } from './flow.util'
 import { EditableDiv } from '../Edge/edge.styled'
+import Add from '@mui/icons-material/Add'
+import {
+	Alert,
+	AppBar,
+	IconButton,
+	Menu,
+	Snackbar,
+	Toolbar,
+} from '@mui/material'
+import { StyledFab } from '../../pages/Dashboard/dashboard.styled'
+import { ArrowBackIos, Save, Clear } from '@mui/icons-material'
 
 const nodeTypes = { textUpdater: Node }
 const edgeTypes = { custom: Edge }
@@ -39,37 +50,38 @@ const edgeOptions = {
 
 const connectionLineStyle = { stroke: 'red' }
 
-const Flow = (props) => {
-	// const match = useMatch()
+const Flow = () => {
 	const { flowID } = useParams()
-	//
 	const reactFlowWrapper = useRef(null)
 	const connectingNodeId = useRef(null)
+	const navigate = useNavigate()
 
 	const reactFlowInstance = useReactFlow()
 	const { project } = reactFlowInstance
 
 	const [data, setData] = useLocalStorage(flowID, {})
 
-	// const [_nodes, _setNodes] = useLocalStorage('flowID', [])
-	// const [_edges, _setEdges] = useLocalStorage('edges', [])
-
 	const titleRef = useRef(null)
 	const [nodes, setNodes] = useState(data?.nodes ?? [])
 	const [edges, setEdges] = useState(data?.edges ?? [])
-	const [title, setTitle] = useState(data.title ?? '')
+
+	const [saveToast, setSaveToast] = useState(false)
+	const [clearToast, setClearToast] = useState(false)
 
 	const save = () => {
+		const title = titleRef?.current?.innerText || 'My Flow'
 		setData({
-			title: titleRef.current.innerText,
+			title,
 			nodes,
 			edges,
 		})
+		setSaveToast(true)
 	}
 
-	const reset = () => {
+	const clear = () => {
 		setNodes([])
 		setEdges([])
+		setClearToast(true)
 	}
 
 	const onNodesChange = useCallback(
@@ -153,6 +165,7 @@ const Flow = (props) => {
 		}
 		reactFlowInstance.addNodes(newNode)
 	}
+
 	return (
 		<div>
 			<Header>
@@ -166,17 +179,40 @@ const Flow = (props) => {
 					style={{
 						fontWeight: 'bold',
 					}}>
-					{data?.title ?? ''}
+					{data?.title ?? 'My Flow'}
 				</EditableDiv>
 				<div>
 					<button onClick={save}>Save</button>
-					<button onClick={reset}>Clear</button>
+					<button onClick={clear}>Clear</button>
 				</div>
 			</Header>
+
+			<AppBar
+				position='fixed'
+				color='primary'
+				sx={{ top: 0, background: '#062d54' }}>
+				<Toolbar>
+					<IconButton
+						onClick={() => navigate('/')}
+						color='inherit'
+						aria-label='open drawer'>
+						<ArrowBackIos />
+					</IconButton>
+
+					<EditableDiv
+						contentEditable={true}
+						placeholder='Title'
+						ref={titleRef}
+						style={{
+							fontWeight: 'bold',
+							color: 'white',
+							background: 'transparent',
+						}}>
+						{data?.title ?? ''}
+					</EditableDiv>
+				</Toolbar>
+			</AppBar>
 			<div className='unselectable' ref={reactFlowWrapper}>
-				<AddButton onClick={onClick}>
-					<span class='material-symbols-outlined'>add</span>
-				</AddButton>
 				<ReactFlow
 					nodes={nodes}
 					edges={edges}
@@ -197,6 +233,47 @@ const Flow = (props) => {
 					{/* <MiniMap pannable zoomable /> */}
 				</ReactFlow>
 			</div>
+
+			<AppBar
+				position='fixed'
+				color='primary'
+				sx={{ top: 'auto', bottom: 0, background: '#062d54' }}>
+				<StyledToolBar>
+					<IconButton color='inherit' aria-label='open drawer'>
+						<Clear onClick={clear} />
+					</IconButton>
+					<StyledFab onClick={onClick} color='primary' aria-label='add'>
+						<Add />
+					</StyledFab>
+					<IconButton color='inherit' aria-label='open drawer'>
+						<Save onClick={save} />
+					</IconButton>
+				</StyledToolBar>
+			</AppBar>
+
+			<Snackbar
+				open={saveToast}
+				autoHideDuration={2000}
+				onClose={() => setSaveToast(false)}>
+				<Alert
+					onClose={() => setSaveToast(false)}
+					severity='success'
+					sx={{ width: '100%' }}>
+					Flow saved
+				</Alert>
+			</Snackbar>
+
+			<Snackbar
+				open={clearToast}
+				autoHideDuration={2000}
+				onClose={() => setClearToast(false)}>
+				<Alert
+					onClose={() => setClearToast(false)}
+					severity='info'
+					sx={{ width: '100%' }}>
+					Flow cleared
+				</Alert>
+			</Snackbar>
 		</div>
 	)
 }
