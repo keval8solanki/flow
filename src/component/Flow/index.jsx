@@ -22,6 +22,8 @@ import { Edge } from '../Edge'
 import { initialEdges, initialNodes } from '../../initialdata'
 import { getSelectedNode } from './flow.util'
 import { EditableDiv } from '../Edge/edge.styled'
+import { StyledFab } from '../../styled/mui.styled'
+import Add from '@mui/icons-material/Add'
 
 const nodeTypes = { textUpdater: Node }
 const edgeTypes = { custom: Edge }
@@ -40,9 +42,7 @@ const edgeOptions = {
 const connectionLineStyle = { stroke: 'red' }
 
 const Flow = (props) => {
-	// const match = useMatch()
 	const { flowID } = useParams()
-	//
 	const reactFlowWrapper = useRef(null)
 	const connectingNodeId = useRef(null)
 
@@ -51,13 +51,9 @@ const Flow = (props) => {
 
 	const [data, setData] = useLocalStorage(flowID, {})
 
-	// const [_nodes, _setNodes] = useLocalStorage('flowID', [])
-	// const [_edges, _setEdges] = useLocalStorage('edges', [])
-
 	const titleRef = useRef(null)
 	const [nodes, setNodes] = useState(data?.nodes ?? [])
 	const [edges, setEdges] = useState(data?.edges ?? [])
-	const [title, setTitle] = useState(data.title ?? '')
 
 	const save = () => {
 		setData({
@@ -174,9 +170,9 @@ const Flow = (props) => {
 				</div>
 			</Header>
 			<div className='unselectable' ref={reactFlowWrapper}>
-				<AddButton onClick={onClick}>
-					<span class='material-symbols-outlined'>add</span>
-				</AddButton>
+				<StyledFab onClick={onClick} color='primary' aria-label='add'>
+					<Add />
+				</StyledFab>
 				<ReactFlow
 					nodes={nodes}
 					edges={edges}

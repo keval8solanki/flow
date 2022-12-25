@@ -26,7 +26,7 @@ export const Node = ({ data }) => {
 			<StyledHandle type='target' position={Position.Top} />
 			<EditableDiv
 				contentEditable={true}
-				placeholder='Name'
+				placeholder='Title'
 				className='nodrag nopan'
 				onInput={(e) => onInput(e, 'name')}
 				style={{
