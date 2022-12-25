@@ -63,9 +63,9 @@ export default function Dashboard() {
 				color='primary'
 				sx={{ top: 'auto', bottom: 0, background: '#062d54' }}>
 				<Toolbar>
-					<IconButton color='inherit' aria-label='open drawer'>
+					{/* <IconButton color='inherit' aria-label='open drawer'>
 						<Menu />
-					</IconButton>
+					</IconButton> */}
 					<StyledFab onClick={() => open()} color='primary' aria-label='add'>
 						<Add />
 					</StyledFab>

@@ -229,8 +229,8 @@ const Flow = () => {
 					onlyRenderVisibleElements={true}
 					edgeTypes={edgeTypes}>
 					<Background color='#9a9a9a' />
-					<Controls />
-					{/* <MiniMap pannable zoomable /> */}
+					
+					
 				</ReactFlow>
 			</div>
 
