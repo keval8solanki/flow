@@ -170,12 +170,13 @@ const Flow = () => {
 		<div>
 			<Header>
 				<Link relative='path' to='/	'>
-					<span class='material-symbols-outlined'>arrow_back_ios</span>
+					<span className='material-symbols-outlined'>arrow_back_ios</span>
 				</Link>
 				<EditableDiv
 					contentEditable={true}
 					placeholder='Title'
 					ref={titleRef}
+					suppressContentEditableWarning={true}
 					style={{
 						fontWeight: 'bold',
 					}}>
@@ -201,6 +202,7 @@ const Flow = () => {
 
 					<EditableDiv
 						contentEditable={true}
+						suppressContentEditableWarning={true}
 						placeholder='Title'
 						ref={titleRef}
 						style={{
@@ -229,8 +231,6 @@ const Flow = () => {
 					onlyRenderVisibleElements={true}
 					edgeTypes={edgeTypes}>
 					<Background color='#9a9a9a' />
-					
-					
 				</ReactFlow>
 			</div>
 

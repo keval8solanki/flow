@@ -73,7 +73,8 @@ export const Edge = ({
 						ref={editableDivRef}
 						onInput={onChange}
 						contentEditable={true}
-						placeholder='Add Text'>
+						placeholder='Add Text'
+						suppressContentEditableWarning={true}>
 						{data?.text ?? ''}
 					</EditableDiv>
 				</div>

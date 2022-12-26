@@ -4,13 +4,16 @@ import styled from 'styled-components'
 export const NodeStyled = styled.div`
 	background: white;
 	overflow: hidden;
-	padding: 30px;
+	padding: 20px 10px;
 	width: auto;
 	height: auto;
 	border: 1px solid #00000052;
 	outline: none;
 	transition: 0.3s;
-	pointer-events: all;
+	pointer-events: ${(props) => (props?.selected ? 'all' : 'none')};
+	box-shadow: ${(props) =>
+		props?.selected ? '0 4px 8px 0 rgba(0, 0, 0, 0.2)' : 'none'};
+
 	border-radius: 5px; /* 5px rounded corners */
 
 	&:hover,
@@ -87,4 +90,17 @@ export const StyledHandle = styled(Handle)`
 		width: 20px;
 		height: 20px;
 	}
+`
+
+export const Controller = styled.div`
+	position: absolute;
+	right: -28px;
+	top: 0px;
+	/* border-radius: 6px; */
+	/* height: 79px; */
+	/* width: 20px; */
+	/* border: 1px solid #00000052; */
+	/* outline: none; */
+	/* transition: 0.3s; */
+	/* background: white; */
 `
